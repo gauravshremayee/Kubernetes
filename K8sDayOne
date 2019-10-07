@@ -1,0 +1,64 @@
+
+#get nodes info
+
+$ kubectl get nodes
+NAME                                          STATUS   ROLES    AGE     VERSION
+gke-hello-server-default-pool-03b44665-5grf   Ready    <none>   2d18h   v1.13.7-gke.24
+gke-hello-server-default-pool-03b44665-65j5   Ready    <none>   2d18h   v1.13.7-gke.24
+gke-hello-server-default-pool-03b44665-ng8w   Ready    <none>   2d18h   v1.13.7-gke.24
+
+
+$ kubectl get pods
+NAME                                          READY   STATUS      RESTARTS   AGE
+hello-server-64db4d4dc7-llr5t                 1/1     Running     0          2d18h
+hello-server2-7954659cc9-b5ncv                1/1     Running     0          39h
+mc1                                           2/2     Running     0          2d12h
+mc2                                           0/2     Completed   0          2d12h
+volumes-example-deployment-795bc84d87-d5g9z   1/1     Running     0          2d13h
+volumes-example-deployment-795bc84d87-mltcg   1/1     Running     0          2d13h
+volumes-example-deployment-795bc84d87-t9p65   1/1     Running     0          2d13h
+
+
+#DESCRIBE NODES
+#kubectl describe node <nodename>
+
+$kubectl describe node gke-hello-server-default-pool-03b44665-5grf
+
+Sample output :
+
+  cpu                        581m (61%)   1003m (106%)
+  memory                     340Mi (12%)  690Mi (26%)
+  ephemeral-storage          0 (0%)      
+  
+  InternalIP:   10.138.0.2
+  ExternalIP:   35.247.97.140
+  InternalDNS:  gke-hello-server-default-pool-03b44665-5grf.us-west1-b.c.silver-seat-254806.internal
+  Hostname:     gke-hello-server-default-pool-03b44665-5grf.us-west1-b.c.silver-seat-254806.internal
+  
+  #Node is a top-level resource in the Kubernetes REST API.
+  
+  #Node Creation:
+  
+  Unlike pods and services, a node is not inherently created by Kubernetes: it is created externally by cloud providers like Google Compute Engine, or it exists in your pool of physical or virtual machines. So when Kubernetes creates a node, it creates an object that represents the node. After creation, Kubernetes checks whether the node is valid or not. For example, if you try to create a node from the following content:
+
+node.yaml
+
+{
+  "kind": "Node",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "10.240.79.157",
+    "labels": {
+      "name": "my-first-k8s-node"
+    }
+  }
+}
+
+#Now Create Node using yaml file
+
+$ kubectl apply -f node.yaml
+
+kubectl get nodes
+NAME                                          STATUS    ROLES    AGE     VERSION
+10.240.79.157                                 Unknown   <none>   10s
+
