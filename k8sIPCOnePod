@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mc2
+spec:
+  containers:
+  - name: producer
+    image: allingeek/ch6_ipc
+    command: ["./ipc", "-producer"]
+  - name: consumer
+    image: allingeek/ch6_ipc
+    command: ["./ipc", "-consumer"]
+  restartPolicy: Never
+  
+  
+  #Two containers producers and consumers
+  #Demo that they share same resources
+  
+ $ kubectl apply -f mc2.yaml
+ 
+ $ kubectl get pods --show-all -w
+NAME      READY     STATUS              RESTARTS  AGE
+mc2       0/2       Pending             0         0s
+mc2       0/2       ContainerCreating   0         0s
+mc2       0/2       Completed           0         29
+
+$ kubectl logs mc2 -c producer
+...
+Produced: f4
+Produced: 1d
+Produced: 9e
+Produced: 27
+$ kubectl logs mc2 -c consumer
+...
+Consumed: f4
+Consumed: 1d
+Consumed: 9e
+Consumed: 27
+Consumed: done
