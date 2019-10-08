@@ -1,9 +1,9 @@
 
 #Topic - Kubernetes Architecture Node status
 
-$gcloud container clusters create hello-server 
+$gcloud container clusters create hello-server --region us-west1-b
 
-$gcloud container clusters get-credentials hello-server
+$gcloud container clusters get-credentials hello-server --region us-west1-b
 
 
 $kubectl create deployment hello-server --image=gcr.io/google-samples/hello-app:1.0
@@ -56,10 +56,16 @@ Sample output :
   Hostname:     gke-hello-server-default-pool-03b44665-5grf.us-west1-b.c.silver-seat-254806.internal
   
   #Node is a top-level resource in the Kubernetes REST API.
-  
+  #Note:External Ip is pingable from your system
   #Node Creation:
-  
-  Unlike pods and services, a node is not inherently created by Kubernetes: it is created externally by cloud providers like Google Compute Engine, or it exists in your pool of physical or virtual machines. So when Kubernetes creates a node, it creates an object that represents the node. After creation, Kubernetes checks whether the node is valid or not. For example, if you try to create a node from the following content:
+ 
+ #kubectl view clusters
+ 
+ #Check the location and credentials that kubectl knows about with this command:
+
+ $kubectl config view
+ 
+ Unlike pods and services, a node is not inherently created by Kubernetes: it is created externally by cloud providers like Google Compute Engine, or it exists in your pool of physical or virtual machines. So when Kubernetes creates a node, it creates an object that represents the node. After creation, Kubernetes checks whether the node is valid or not. For example, if you try to create a node from the following content:
 
 node.yaml
 
@@ -67,7 +73,7 @@ node.yaml
   "kind": "Node",
   "apiVersion": "v1",
   "metadata": {
-    "name": "10.240.79.157",
+    "name": "demoNode",
     "labels": {
       "name": "my-first-k8s-node"
     }
@@ -84,6 +90,7 @@ NAME                                          STATUS    ROLES    AGE     VERSION
 
 
 #Request particular memory 
+#Create pods in namespace
 $kubectl create namespace mem-example
 
 test.yaml
@@ -109,3 +116,49 @@ spec:
 $kubetcly apply -f test.yaml
 
 $kubectl get pod memory-demo --output=yaml --namespace=mem-example
+
+
+
+#Getting a shell to a Container
+#In this exercise, you create a Pod that has one Container. The Container runs the nginx image. Here is the configuration file for the Pod:
+
+application/shell-demo.yaml Copy application/shell-demo.yaml to clipboard
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shell-demo
+spec:
+  volumes:
+  - name: shared-data
+    emptyDir: {}
+  containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - name: shared-data
+      mountPath: /usr/share/nginx/html
+  hostNetwork: true
+  dnsPolicy: Default
+
+#Create the Pod:
+
+$kubectl apply -f https://k8s.io/examples/application/shell-demo.yaml
+#Verify that the Container is running:
+
+$kubectl get pod shell-demo
+#Get a shell to the running Container:
+
+$kubectl exec -it shell-demo -- /bin/bash
+
+
+kubectl exec shell-demo env
+#Experiment running other commands. Here are some examples:
+
+$kubectl exec shell-demo ps aux
+$kubectl exec shell-demo ls /
+$kubectl exec shell-demo cat /proc/1/mounts
+
+#Opening a shell when a Pod has more than one Container
+#If a Pod has more than one Container, use --container or -c to specify a Container in the kubectl exec command. For example, suppose you have a Pod named my-pod, and the Pod has two containers named main-app and helper-app. The following command would open a shell to the main-app Container.
+
+$kubectl exec -it my-pod --container main-app -- /bin/bash
