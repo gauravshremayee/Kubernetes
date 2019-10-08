@@ -1,6 +1,21 @@
 
 #Topic - Kubernetes Architecture Node status
 
+$gcloud container clusters create hello-server 
+
+$gcloud container clusters get-credentials hello-server
+
+
+$kubectl create deployment hello-server --image=gcr.io/google-samples/hello-app:1.0
+
+$kubectl expose deployment hello-server --type LoadBalancer \
+  --port 80 --target-port 8080
+
+$kubectl get pods
+
+$kubectl get service hello-server
+
+
 $kubectl describe node <insert-node-name-here>
 
 
@@ -67,3 +82,30 @@ kubectl get nodes
 NAME                                          STATUS    ROLES    AGE     VERSION
 10.240.79.157                                 Unknown   <none>   10s
 
+
+#Request particular memory 
+$kubectl create namespace mem-example
+
+test.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-demo
+  namespace: mem-example
+spec:
+  containers:
+  - name: memory-demo-ctr
+    image: polinux/stress
+    resources:
+      limits:
+        memory: "200Mi"
+      requests:
+        memory: "100Mi"
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+    
+    
+$kubetcly apply -f test.yaml
+
+$kubectl get pod memory-demo --output=yaml --namespace=mem-example
