@@ -1,4 +1,9 @@
 
+#Topic - Kubernetes Architecture Node status
+
+$kubectl describe node <insert-node-name-here>
+
+
 #get nodes info
 
 $ kubectl get nodes
