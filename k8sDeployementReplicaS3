@@ -1,0 +1,7 @@
+apiVersion: apps/v1kind: Deploymentmetadata: labels: app.kubernetes.io/name: load-balancer-example name: hello-worldspec: replicas: 5 selector: matchLabels: app.kubernetes.io/name: load-balancer-example template: metadata: labels: app.kubernetes.io/name: load-balancer-example spec: containers: - image: gcr.io/google-samples/node-hello:1.0 name: hello-world ports: - containerPort: 8080
+
+The preceding command creates a Deployment object and an associated ReplicaSet object. The ReplicaSet has five Pods, each of which runs the Hello World application.
+
+Display information about the Deployment:kubectl get deployments hello-worldkubectl describe deployments hello-worldDisplay information about your ReplicaSet objects:kubectl get replicasetskubectl describe replicasetsCreate a Service object that exposes the deployment:kubectl expose deployment hello-world --type=LoadBalancer --name=my-serviceDisplay information about the Service:kubectl get services my-serviceThe output is similar to this:NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGEmy-service LoadBalancer 10.3.245.137 104.198.205.71 8080/TCP 54skubectl describe services my-service
+curl http://<external-ip>:<port>
+
