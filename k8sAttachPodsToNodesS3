@@ -1,0 +1,7 @@
+apiVersion: v1kind: Podmetadata: name: nginx labels: env: testspec: containers: - name: nginx image: nginx imagePullPolicy: IfNotPresent nodeSelector: disktype: ssd
+kubectl label nodes kubernetes-foo-node-1.c.a-robinson.internal disktype=ssd
+
+kubectl get nodes --show-labels
+
+kubectl get pods -o wide
+
