@@ -1,4 +1,98 @@
-apiVersion: v1kind: Podmetadata: name: qos-demo namespace: qos-examplespec: containers: - name: qos-demo-ctr image: nginx resources: limits: memory: "200Mi" cpu: "700m" requests: memory: "200Mi" cpu: "700m"
+When Kubernetes creates a Pod it assigns one of these QoS classes to the Pod:
+
+Guaranteed
+Burstable
+BestEffort
 
 
+#For a Pod to be given a QoS class of Guaranteed:
+
+#Every Container in the Pod must have a memory limit and a memory request, and they must be the same.
+#Every Container in the Pod must have a CPU limit and a CPU request, and they must be the same.
+
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos-demo
+  namespace: qos-example
+spec:
+  containers:
+  - name: qos-demo-ctr
+    image: nginx
+    resources:
+      limits:
+        memory: "200Mi"
+        cpu: "700m"
+      requests:
+        memory: "200Mi"
+        cpu: "700m"
+        
+        
+        
+$kubectl create namespace qos-example
+
+
+$kubectl get pod qos-demo --namespace=qos-example --output=yaml
+
+You will see guaranteed
+
+
+A Pod is given a QoS class of Burstable if:
+
+The Pod does not meet the criteria for QoS class Guaranteed.
+At least one Container in the Pod has a memory or CPU request.
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos-demoz
+  namespace: qos-example
+spec:
+  containers:
+  - name: qos-demo-ctr
+    image: nginx
+    resources:
+      limits:
+        memory: "100Mi"
+        cpu: "600m"
+      requests:
+        memory: "200Mi"
+        cpu: "700m"
+        
+      $kubectl create namespace qos-example
+
+
+$kubectl get pod qos-demoz --namespace=qos-example --output=yaml
+  
+        
+        
+you will see burst
 Note: If a Container specifies its own memory limit, but does not specify a memory request, Kubernetes automatically assigns a memory request that matches the limit. Similarly, if a Container specifies its own CPU limit, but does not specify a CPU request, Kubernetes automatically assigns a CPU request that matches the limit.
+
+
+For a Pod to be given a QoS class of BestEffort, the Containers in the Pod must not have any memory or CPU limits or requests.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos-demoxz
+  namespace: qos-example
+spec:
+  containers:
+  - name: qos-demo-ctr
+    image: nginx
+   
+   
+   
+        
+$kubectl create namespace qos-example
+
+
+$kubectl get pod qos-demoxz --namespace=qos-example --output=yaml
+
+You will See BestEffort.
+
+
+
