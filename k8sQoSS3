@@ -1,0 +1,4 @@
+apiVersion: v1kind: Podmetadata: name: qos-demo namespace: qos-examplespec: containers: - name: qos-demo-ctr image: nginx resources: limits: memory: "200Mi" cpu: "700m" requests: memory: "200Mi" cpu: "700m"
+
+
+Note: If a Container specifies its own memory limit, but does not specify a memory request, Kubernetes automatically assigns a memory request that matches the limit. Similarly, if a Container specifies its own CPU limit, but does not specify a CPU request, Kubernetes automatically assigns a CPU request that matches the limit.
