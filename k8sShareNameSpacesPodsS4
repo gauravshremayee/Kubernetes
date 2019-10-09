@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  shareProcessNamespace: true
+  containers:
+  - name: nginx
+    image: nginx
+  - name: shell
+    image: busybox
+    securityContext:
+      capabilities:
+        add:
+        - SYS_PTRACE
+    stdin: true
+    tty: true
+    
+    
+    
+    
+    kubectl attach -it nginx -c shell
+If you don’t see a command prompt, try pressing enter.
+
+/ # ps ax
+PID   USER     TIME  COMMAND
+    1 root      0:00 /pause
+    8 root      0:00 nginx: master process nginx -g daemon off;
+   14 101       0:00 nginx: worker process
+   15 root      0:00 sh
+   21 root      0:00 ps ax
+   
