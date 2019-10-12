@@ -1,0 +1,34 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: example
+spec:
+  privileged: false  # Don't allow privileged pods!
+  # The rest fills in some required fields.
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  runAsUser:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  volumes:
+  - '*'
+  
+  kubectl-admin create -f example-psp.yaml
+Now, as the unprivileged user, try to create a simple pod:
+
+kubectl-user create -f- <<EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name:      pause
+spec:
+  containers:
+    - name:  pause
+      image: k8s.gcr.io/pause
+EOF
+Error from server (Forbidden): error when creating "STDIN": pods "pause" is forbidden: unable to validate against any pod security policy: []
+
+
