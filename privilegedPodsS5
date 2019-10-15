@@ -1,3 +1,14 @@
+#enable pod security in the google cloud or whichever cloud you are using 
+gcloud config set project  silver-seat-254806
+gcloud config set compute/zone us-west1-a
+gcloud config set compute/region us-west1-a
+gcloud components update
+gcloud beta container clusters create hello-server3 --enable-pod-security-policy --region us-west1-b
+
+
+
+
+
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
