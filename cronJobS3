@@ -1,0 +1,42 @@
+
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: busybox
+            args:
+            - /bin/sh
+            - -c
+            - date; echo Hello from the Kubernetes cluster
+          restartPolicy: OnFailure
+
+
+gaurav_2897@cloudshell:~ (silver-seat-254806)$ kubectl create -f cronJob.yaml
+cronjob.batch/hello created
+gaurav_2897@cloudshell:~ (silver-seat-254806)$
+gaurav_2897@cloudshell:~ (silver-seat-254806)$ kubectl run hello --schedule="*/1 * * * *" --restart=OnFailure --image=busybox -- /bin/sh -c "date; echo Hello from the Kubernetes cluster"
+kubectl run --generator=cronjob/v1beta1 is DEPRECATED and will be removed in a future version. Use kubectl run --generator=run-pod/v1 or kubectl create instead.
+Error from server (AlreadyExists): cronjobs.batch "hello" already exists
+gaurav_2897@cloudshell:~ (silver-seat-254806)$
+gaurav_2897@cloudshell:~ (silver-seat-254806)$ kubectl run hello1 --schedule="*/1 * * * *" --restart=OnFailure --image=busybox -- /bin/sh -c "date; echo Hello from the Kubernetes cluster"
+kubectl run --generator=cronjob/v1beta1 is DEPRECATED and will be removed in a future version. Use kubectl run --generator=run-pod/v1 or kubectl create instead.
+cronjob.batch/hello1 created
+gaurav_2897@cloudshell:~ (silver-seat-254806)$ kubectl get cronjob hello
+NAME    SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+hello   */1 * * * *   False     5        26s             5m19s
+gaurav_2897@cloudshell:~ (silver-seat-254806)$ kubectl get cronjob hello
+NAME    SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+hello   */1 * * * *   False     5        30s             5m23s
+gaurav_2897@cloudshell:~ (silver-seat-254806)$ kubectl get cronjob hello
+NAME    SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+hello   */1 * * * *   False     5        31s             5m24s
+gaurav_2897@cloudshell:~ (silver-seat-254806)$ kubectl get jobs --watch
