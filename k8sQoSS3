@@ -94,5 +94,9 @@ $kubectl get pod qos-demoxz --namespace=qos-example --output=yaml
 
 You will See BestEffort.
 
+#Detailed info about pod 
 
+$kubectl get pod qos-demoz --output=yaml --namespace=qos-example
+
+$kubectl get pods --namespace=qos-example
 
