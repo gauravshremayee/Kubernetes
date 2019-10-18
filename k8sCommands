@@ -273,3 +273,37 @@ Verbosity	Description
 --v=7	Display HTTP request headers.
 --v=8	Display HTTP request contents.
 --v=9	Display HTTP request contents without truncation of contents.
+
+
+
+
+#Find pods from service
+
+$Kubectl describe services
+
+#List pods within services
+
+$Kubectl get pods -l app=hello-server
+
+
+#Debug pending pods 
+
+$kubectl describe pod on the pending Pod and look at its events:
+
+Similar to Node didnt have enough memory space.
+
+$kubectl get events --namespace=my-namespace
+
+$kubectl get events --all-namespaces
+
+
+#Get yaml file of pods
+
+$kubectl get pod mc3 -o yaml
+
+
+#debugging a down/unreachable node
+
+$kubectl describe node nodename
+
+
