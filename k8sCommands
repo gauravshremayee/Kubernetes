@@ -306,4 +306,5 @@ $kubectl get pod mc3 -o yaml
 
 $kubectl describe node nodename
 
-
+#DNS ip networking
+$kubectl get service -n kube-system kube-dns
