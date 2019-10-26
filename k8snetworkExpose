@@ -86,6 +86,8 @@ gke-hello-server-default-pool-e43d3a9c-tf5r   Ready    <none>   4d10h   v1.13.10
 #Check which node runs mc3
 $kubectl describe pod mc3
 #mc3 is running in gke-hello-server-default-pool-e43d3a9c-jqvc
+#It is impossible to connect to a node over private addresses from cloudshell as these instances are in different networks (separated from each other).
+
 # CREATE FIREWALL RULE 
 $gcloud compute firewall-rules create test-node-port --allow tcp:31357
 $kubectl describe pod mc3
