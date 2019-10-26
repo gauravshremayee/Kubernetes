@@ -72,3 +72,21 @@ $ kubectl describe service mc3
 
 
     
+gaurav_2897@cloudshell:~ (pubsub-quickstart-256120)$ kubectl get services
+NAME           TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
+hello-server   LoadBalancer   10.59.241.255   34.82.23.224   80:30883/TCP   4d10h
+kubernetes     ClusterIP      10.59.240.1     <none>         443/TCP        4d10h
+mc3            NodePort       10.59.242.245   <none>         80:31357/TCP   41h
+gaurav_2897@cloudshell:~ (pubsub-quickstart-256120)$ kubectl get no -owide
+NAME                                          STATUS   ROLES    AGE     VERSION          INTERNAL-IP   EXTERNAL-IP      OS-IMAGE                             KERNEL-VERSION   CONTAINER-RUNTIME
+gke-hello-server-default-pool-e43d3a9c-gfms   Ready    <none>   4d10h   v1.13.10-gke.0   10.138.0.7    34.82.231.168    Container-Optimized OS from Google   4.14.137+        docker://18.9.7
+gke-hello-server-default-pool-e43d3a9c-jqvc   Ready    <none>   4d10h   v1.13.10-gke.0   10.138.0.5    35.230.1.6       Container-Optimized OS from Google   4.14.137+        docker://18.9.7
+gke-hello-server-default-pool-e43d3a9c-tf5r   Ready    <none>   4d10h   v1.13.10-gke.0   10.138.0.6    35.227.140.197   Container-Optimized OS from Google   4.14.137+        docker://18.9.7
+
+#Check which node runs mc3
+$kubectl describe pod mc3
+#mc3 is running in gke-hello-server-default-pool-e43d3a9c-jqvc
+# CREATE FIREWALL RULE 
+$gcloud compute firewall-rules create test-node-port --allow tcp:31357
+$kubectl describe pod mc3
+Hello World!
