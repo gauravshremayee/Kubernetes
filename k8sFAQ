@@ -1,0 +1,7 @@
+1) How to expose pods or container webapp to external world.
+
+Run it as deployment and ex`pose it
+
+kubectl expose deployment hello-world --type=LoadBalancer --name=my-service
+
+https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/
