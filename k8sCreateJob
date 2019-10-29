@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ubuntu
+spec:
+  template:
+    spec:
+      containers:
+      - name: ubuntu
+        image: ubuntu
+        command: ["df",  "-h"]
+      restartPolicy: Never
+  backoffLimit: 4
+  
+  $kubectl create -f ubuntuJob.yaml
+  
+  To get the pod name
+  $kubectl describe jobs/pi
+
+  
+  To print the pod command
+  
+  $kubectl logs $podname
+  
+  
