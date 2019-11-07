@@ -4,6 +4,10 @@ $sudo minikube status
 $sudo kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
 
 $sudo kubectl expose deployment hello-minikube --type=NodePort --port=8080
+
+#LoadBalancer will also provide external ip to it
+$kubectl expose deployment hello-kube --type LoadBalancer   --port 80 --target-port 8080
+
 $sudo kubectl get pod
 # Scale the deployment on the single node itself 
 $sudo kubectl scale deployment hello-minikube  --replicas=10
