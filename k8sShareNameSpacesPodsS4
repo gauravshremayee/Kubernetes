@@ -1,3 +1,38 @@
+
+#memory demo 
+#default namespace will only exist until we create a new namespace 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-demo-2
+  namespace: mem-example
+spec:
+  containers:
+  - name: memory-demo-2-ctr
+    image: polinux/stress
+    resources:
+      requests:
+        memory: "50Mi"
+      limits:
+        memory: "100Mi"
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "250M", "--vm-hang", "1"]
+    
+    
+    
+    
+In the args section of the configuration file, you can see that the Container will attempt to allocate 250 MiB of memory, which is well above the 100 MiB limit.
+
+Create the Pod:
+
+$kubectl apply -f https://k8s.io/examples/pods/resource/memory-request-limit-2.yaml --namespace=mem-example
+
+
+$kubectl get pod memory-demo-2 --output=yaml --namespace=mem-example
+
+
+
 apiVersion: v1
 kind: Pod
 metadata:
@@ -19,7 +54,7 @@ spec:
     
     
     
-    kubectl attach -it nginx -c shell
+kubectl attach -it nginx -c shell
 If you don’t see a command prompt, try pressing enter.
 
 / # ps ax
