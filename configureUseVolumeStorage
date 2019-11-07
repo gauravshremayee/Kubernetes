@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis
+spec:
+  containers:
+  - name: redis
+    image: redis
+    volumeMounts:
+    - name: redis-storage
+      mountPath: /data/redis
+  volumes:
+  - name: redis-storage
+    emptyDir: {}
+    
+    
+    
+    $kubectl get pod redis --watch
+    
+    $kubectl exec -it redis -- /bin/bash
+    
+    
+
+cd /data/redis/
+root@redis:/data/redis# echo Hello > test-file
+
+In your shell, kill the Redis process:
+
+ $ps aux
+
+root@redis:/data/redis# kill <pid>
+
+
+# At this point, the Container has terminated and restarted. This is because the Redis Pod has a restartPolicy of Always
+
+$kubectl exec -it redis -- /bin/bash
+
+Check /data/redis file will be there 
