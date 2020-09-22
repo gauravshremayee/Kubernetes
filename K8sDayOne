@@ -18,6 +18,9 @@ $kubectl get service hello-server
 
 $kubectl describe node <insert-node-name-here>
 
+#List container by pods
+
+kubectl get pods --namespace kube-system -o jsonpath="{..image}"
 
 #get nodes info
 
